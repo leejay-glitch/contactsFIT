@@ -9,7 +9,7 @@ use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\Groupcontroller;
 
 
-Route::get('/', function () {return view('welcome');});    
+Route::get('/', function () {return view('welcome');})->name('intro');    
 
 Route::get('/signup', function () {return view('signup');})->name('signup');
     

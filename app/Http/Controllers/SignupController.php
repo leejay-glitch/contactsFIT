@@ -25,7 +25,7 @@ class SignupController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput()->with('form', 'signup');
         }
 
         $user = new User();

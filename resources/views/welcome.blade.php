@@ -1,9 +1,7 @@
 @extends('layouts.app')
+@section('title', 'Home')
 
 @section('content')
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,12 +27,12 @@
                     <div class="card-header">{{ __('Welcome to Contacts Management System') }}</div>
 
                     <div class="card-body">
-                        <div id="login-form">
+                        <div id="login-form" style="display: {{ session('form') == 'signup' ? 'none' : 'block' }};">
                             @include('login') <!-- Include the login form -->
                             <p class="mt-3">Don't have an account? <span class="form-toggle" onclick="toggleForm('signup')">Sign Up</span></p>
                         </div>
 
-                        <div id="signup-form" style="display: none;">
+                        <div id="signup-form" style="display: {{ session('form') == 'signup' ? 'block' : 'none' }};">
                             @include('signup') <!-- Include the signup form -->
                             <p class="mt-3">Already have an account? <span class="form-toggle" onclick="toggleForm('login')">Login</span></p>
                         </div>
