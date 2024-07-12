@@ -10,57 +10,84 @@ class Groupcontroller extends Controller
 {
     // app/Http/Controllers/GroupController.php
 
-public function index()
-{
-    // $groups = Group::with('contacts')->get();
-    $contacts = Contact::all();
-    $wiseGroup = Group::find(7); // Replace 1 with the ID of the Wise Group
-    $notWiseGroup = Group::find(8); // Replace 2 with the ID of the Not Wise Group
-    return view('groups', compact('contacts', 'wiseGroup', 'notWiseGroup'));
-
-    // return view('Groups', compact('groups','contacts'));
-}
+    public function index()
+    {
+        $groups = Group::with('contacts')->get();
+        return view('groups', compact('groups'));
+    }
 
 public function create()
+    {
+        $contacts = Contact::all();
+        return view('groups-create', compact('contacts'));
+    }
+
+    public function store(Request $request)
 {
-    return view('groups-create');
+    $validatedData = $request->validate([
+        'group_name' => 'required|max:255',
+        'description' => 'nullable|string',
+        'contacts' => 'required|array',
+        'contacts.*' => 'exists:contacts,id',
+    ]);
+
+    // Check if the group already exists by name
+    $group = Group::where('name', $validatedData['group_name'])->first();
+
+    if (!$group) {
+        // If the group does not exist, create a new one
+        $group = Group::create([
+            'name' => $validatedData['group_name'],
+            'description' => $validatedData['description'],
+        ]);
+    }
+
+    // Sync the contacts to the group (whether existing or new)
+    $group->contacts()->syncWithoutDetaching($validatedData['contacts']);
+
+    // Redirect back to groups.index with a success message
+    return redirect()->route('groups.index')->with('success', 'Contacts added to group successfully.');
 }
 
-public function store(Request $request)
-{
-    $groups = Group::create($request->all());
-    return redirect()->route('groups.index');
-}
 
-public function edit(Group $group)
-{
-    return view('groups.edit', compact('group'));
-}
+    public function edit($id)
+    {
+        $group = Group::findOrFail($id);
+        return view('groups.edit', compact('group'));
+    }
 
-public function update(Request $request, Group $group)
-{
-    $group->update($request->all());
-    return redirect()->route('groups.index');
-}
+    public function update(Request $request, Group $group)
+    {
+        $group->update($request->all());
+        return redirect()->route('groups.index');
+    }
 
-public function destroy(Group $group)
+    public function destroy($id)
 {
+    $group = Group::findOrFail($id);
     $group->delete();
-    return redirect()->route('groups.index');
+
+    return redirect()->route('groups.index')->with('success', 'Group deleted successfully.');
 }
 
-public function createWiseAndNotWiseGroups()
+public function assignContactsForm()
 {
-    $wiseGroup = Group::create([
-        'name' => 'Wise People',
-        'description' => 'A group for wise and intelligent individuals'
+    $groups = Group::all();
+    $contacts = Contact::all();
+    return view('assigngroup', compact('groups', 'contacts'));
+}
+
+public function assignContacts(Request $request)
+{
+    $validatedData = $request->validate([
+        'group_id' => 'required|exists:groups,id',
+        'contacts' => 'required|array',
+        'contacts.*' => 'exists:contacts,id',
     ]);
 
-    $notWiseGroup = Group::create([
-        'name' => 'Not Wise People',
-        'description' => 'A group for, well, not so wise individuals'
-    ]);
+    $group = Group::findOrFail($validatedData['group_id']);
+    $group->contacts()->syncWithoutDetaching($validatedData['contacts']);
 
-    return redirect()->route('groups.index');
+    return redirect()->route('groups.index')->with('success', 'Contacts assigned to group successfully.');
 }
 }

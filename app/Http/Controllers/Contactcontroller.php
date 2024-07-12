@@ -91,48 +91,12 @@ class ContactController extends Controller
         return redirect()->route('groups.index')->with('success', 'Contact removed from Wise People group successfully.');
     }
 
-    public function removeFromNotWiseGroup(Contact $contact)
+         public function removeFromGroup($contactId, $groupId)
     {
-        $notWiseGroup = Group::where('name', 'Not Wise People')->firstOrFail();
-        $contact->groups()->detach($notWiseGroup);
+        $contact = Contact::findOrFail($contactId);
+        $contact->groups()->detach($groupId);
 
-        return redirect()->route('groups.index')->with('success', 'Contact removed from Not Wise People group successfully.');
+        return redirect()->route('groups.index')->with('success', 'Contact removed from group successfully.');
     }
-
-    public function assignToGroupForm()
-    {
-        $contacts = Contact::all();
-        $groups = Group::all();
-
-        return view('assigngroup', compact('contacts', 'groups'));
-    }
-
-    public function AssignToGroup(Request $request)
-{   
-    dd('Assign to group method called');
-    \Log::info('Received request', $request->all());
-
-    try {
-        $validatedData = $request->validate([
-            'contact_id' => 'required|exists:contacts,id',
-            'group_id' => 'required|exists:groups,id',
-        ]);
-
-        $contact = Contact::findOrFail($validatedData['contact_id']);
-        $group = Group::findOrFail($validatedData['group_id']);
-
-        dump($contact, $group);
-
-        $contact->groups()->syncWithoutDetaching([$group->id]);
-
-        \Log::info('Contact assigned to group successfully.');
-
-        return redirect()->route('groups.index')->with('success', 'Contact assigned to group successfully.');
-    } catch (\Exception $e) {
-        \Log::error('Error assigning contact to group:', [$e->getMessage(), $e->getTrace()]);
-        return redirect()->back()->with('error', 'Error assigning contact to group.');
-    }
-}
-
     
 }

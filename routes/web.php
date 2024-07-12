@@ -8,6 +8,9 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\Groupcontroller;
 
+Route::middleware('web')->group(function ()
+{
+
 
 Route::get('/', function () {return view('welcome');})->name('intro');    
 
@@ -31,7 +34,7 @@ Route::get('/contacts/{id}/edit', [ContactController::class, 'edit'])->name('con
 Route::post('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
-
+route::delete('/contacts/{contact}/removeFromGroup/{group}', [ContactController::class, 'removeFromGroup'])->name('contacts.remove-from-group');
 
 Route::get('/Groups-create', function () {return view('Groups-create');})->name('Groups-create');
 Route::get('/groups/index', [GroupController::class,'index'])->name('groups.index');
@@ -41,10 +44,14 @@ Route::get('/groups/{group}/edit', [GroupController::class,'edit'])->name('group
 Route::put('/groups/{group}', [GroupController::class,'update'])->name('groups.update');;
 Route::delete('/groups/{group}', [GroupController::class,'destroy'])->name('groups.destroy');;
 Route::post('/groups/create-wise-groups', [GroupController::class, 'createWiseAndNotWiseGroups'])->name('groups.create-wise-groups');
+Route::get('/groups/assign', [GroupController::class, 'assignContactsForm'])->name('groups.assign-form');
+Route::post('/groups/assign', [GroupController::class, 'assignContacts'])->name('groups.assign');
 
-Route::get('/contacts/assign-to-group-form', [ContactController::class, 'assignToGroupForm'])->name('assign-to-group-form');
-Route::post('/contacts/Assign-to-group', [ContactController::class, 'AssignToGroup'])->name('assign-to-group');
-Route::post('/contacts/{contact}/assign-to-wise-group', [ContactController::class, 'assignToWiseGroup'])->name('contacts.assign-to-wise-group');
-Route::post('/contacts/{contact}/assign-to-not-wise-group', [ContactController::class, 'assignToNotWiseGroup'])->name('contacts.assign-to-not-wise-group');
-Route::delete('/contacts/{contact}/remove-from-wise-group', [ContactController::class, 'removeFromWiseGroup'])->name('contacts.remove-from-wise-group');
-Route::delete('/contacts/{contact}/remove-from-not-wise-group', [ContactController::class, 'removeFromNotWiseGroup'])->name('contacts.remove-from-not-wise-group');
+
+
+
+
+
+
+
+});

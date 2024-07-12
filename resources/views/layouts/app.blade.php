@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>@yield('title', 'Contacts Management System')</title>
     <style>
         body {
@@ -71,6 +73,7 @@
         @else
             <a href="{{ route('home') }}">Home</a>
             <a href="{{ route('contacts.index') }}">Contacts</a>
+            <a href="{{ route('groups.index') }}">Groups</a>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" style="background: none; border: none; color: white; text-align: left; padding: 0; cursor: pointer;">Logout</button>

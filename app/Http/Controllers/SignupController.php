@@ -34,7 +34,7 @@ class SignupController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        return redirect()->route('login')->with('success', 'You have successfully registered!');
+        return back()->with('success', 'You have successfully registered!');
     }
 }
 
