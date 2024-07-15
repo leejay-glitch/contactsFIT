@@ -35,6 +35,10 @@ Route::post('/contacts/{id}', [ContactController::class, 'update'])->name('conta
 Route::delete('/contacts/{id}', [ContactController::class, 'destroy'])->name('contacts.destroy');
 Route::put('/contacts/{id}', [ContactController::class, 'update'])->name('contacts.update');
 route::delete('/contacts/{contact}/removeFromGroup/{group}', [ContactController::class, 'removeFromGroup'])->name('contacts.remove-from-group');
+Route::get('/contacts/search', [ContactController::class, 'search'])->name('contacts.search');
+Route::get('/contacts/export', [ContactController::class,'export'])->name('contacts.export');
+Route::get('/contacts/import', [ContactController::class,'import'])->name('contacts.import');
+
 
 Route::get('/Groups-create', function () {return view('Groups-create');})->name('Groups-create');
 Route::get('/groups/index', [GroupController::class,'index'])->name('groups.index');
@@ -46,8 +50,9 @@ Route::delete('/groups/{group}', [GroupController::class,'destroy'])->name('grou
 Route::post('/groups/create-wise-groups', [GroupController::class, 'createWiseAndNotWiseGroups'])->name('groups.create-wise-groups');
 Route::get('/groups/assign', [GroupController::class, 'assignContactsForm'])->name('groups.assign-form');
 Route::post('/groups/assign', [GroupController::class, 'assignContacts'])->name('groups.assign');
-
-
+Route::get('/groups/search', [GroupController::class, 'search'])->name('groups.search');
+Route::get('/groups/export', [GroupController::class, 'export'])->name('groups.export');
+Route::get('/groups/import', [GroupController::class, 'import'])->name('groups.import');
 
 
 

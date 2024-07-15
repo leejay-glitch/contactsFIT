@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\models\Group;
 use App\Models\Contact;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\GroupsExport;
 
 class Groupcontroller extends Controller
 {
@@ -69,6 +71,21 @@ public function create()
 
     return redirect()->route('groups.index')->with('success', 'Group deleted successfully.');
 }
+
+public function search(Request $request)
+{
+    $search = $request->input('search');
+    $groups = Group::where('name', 'like', "%$search%")
+                   ->orWhere('description', 'like', "%$search%")
+                   ->get();
+    
+    return view('Groups', compact('groups'));
+}
+
+public function export()
+    {
+        return Excel::download(new GroupsExport, 'groups.xlsx');
+    }
 
 public function assignContactsForm()
 {

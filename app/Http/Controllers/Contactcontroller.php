@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Models\Group;
+use App\Exports\ContactsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ContactController extends Controller
 {
@@ -67,28 +69,20 @@ class ContactController extends Controller
         return redirect()->route('contacts.index')->with('success', 'Contact deleted successfully.');
     }
 
-    // public function assignToWiseGroup(Contact $contact)
-    // {
-    //     $wiseGroup = Group::where('name', 'Wise People')->firstOrFail();
-    //     $contact->groups()->syncWithoutDetaching($wiseGroup);
-
-    //     return redirect()->route('groups.index')->with('success', 'Contact assigned to Wise People group successfully.');
-    // }
-
-    // public function assignToNotWiseGroup(Contact $contact)
-    // {
-    //     $notWiseGroup = Group::where('name', 'Not Wise People')->firstOrFail();
-    //     $contact->groups()->syncWithoutDetaching($notWiseGroup);
-
-    //     return redirect()->route('groups.index')->with('success', 'Contact assigned to Not Wise People group successfully.');
-    // }
-
-    public function removeFromWiseGroup(Contact $contact)
+    public function search(Request $request)
     {
-        $wiseGroup = Group::where('name', 'Wise People')->firstOrFail();
-        $contact->groups()->detach($wiseGroup);
+    $search = $request->input('search');
+    $contacts = Contact::where('name', 'like', "%$search%")
+                       ->orWhere('email', 'like', "%$search%")
+                       ->get();
+    
+    return view('contacts', compact('contacts'));
+    }
 
-        return redirect()->route('groups.index')->with('success', 'Contact removed from Wise People group successfully.');
+
+    public function export()
+    {
+        return Excel::download(new ContactsExport, 'contacts.xlsx');
     }
 
          public function removeFromGroup($contactId, $groupId)

@@ -34,6 +34,15 @@
         .action-buttons button:hover, .group-contacts-button button:hover {
             background-color: #0056b3;
         }
+        .input-group-append button {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }   
     </style>
 </head>
 <body>
@@ -41,6 +50,17 @@
     @if (session('success'))
         <p>{{ session('success') }}</p>
     @endif
+    
+    <form action="{{ route('contacts.search') }}" method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search contacts..." name="search">
+            <div class="input-group-append">
+                <button type="submit">
+                    <i class="fas fa-search"></i> 
+                </button>
+            </div>
+        </div>
+    </form>
     <table>
         <thead>
             <tr>
@@ -76,6 +96,18 @@
             @endforeach
         </tbody>
     </table>
+</div>
+<!-- contacts.index.blade.php -->
+<form action="{{ route('contacts.export') }}">
+    <button type="submit">Export Contacts</button>
+</form>
+<!-- contacts.import.blade.php -->
+<form action="{{ route('contacts.import') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file">
+    <button type="submit">Import Contacts</button>
+</form>
+
 
     <p class="group-contacts-button">
         <a href="{{ route('groups.index') }}">

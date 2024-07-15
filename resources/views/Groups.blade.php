@@ -25,10 +25,27 @@
         padding: 5px 8px; /* Even smaller padding */
         font-size: 13px; /* Even smaller font size */
     }
+    .input-group-append button{
+            display: flex;
+            align-items: center;
+            background-color: #007bff;
+            color: white;
+            border: none;
+    } 
 </style>
 
 <div class="container">
     <h1>Groups</h1>
+    <form action="{{ route('groups.search') }}" method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search groups..." name="search">
+            <div class="input-group-append">
+                <button type="submit">
+                    <i class="fas fa-search"></i> <!-- Font Awesome search icon -->
+                </button>
+            </div>
+        </div>
+    </form>
 
     <table class="table table-striped">
         <thead>
@@ -72,6 +89,7 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 
     <div class="mt-3">
         <a href="{{ url('/groups/create') }}">
@@ -82,4 +100,14 @@
         </a>
     </div>
 </div>
+<!-- contacts.index.blade.php -->
+<form action="{{ route('groups.export') }}">
+    <button type="submit" class="btn btn-primary">Export groups</button>
+</form>
+<!-- contacts.import.blade.php -->
+<form action="{{ route('groups.import') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file">
+    <button type="submit" class="btn btn-primary">Import Groups</button>
+</form>
 @endsection
