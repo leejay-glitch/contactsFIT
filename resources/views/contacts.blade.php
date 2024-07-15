@@ -17,6 +17,23 @@
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+        .action-buttons button, .group-contacts-button button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px; /* Rounded corners */
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+        .action-buttons button:hover, .group-contacts-button button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -32,6 +49,7 @@
                 <th>Email</th>
                 <th>Location</th>
                 <th>Instagram</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -47,7 +65,7 @@
                             <a href="{{ route('contacts.edit', $contact->id) }}">
                                 <button type="button">Edit</button>
                             </a>
-                            <form action="{{ route('contacts.destroy', ['id' => $contact->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this contact?');">
+                            <form action="{{ route('contacts.destroy', ['id' => $contact->id]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this contact?');" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit">Delete</button>
@@ -58,11 +76,10 @@
             @endforeach
         </tbody>
     </table>
-           
-    </ul>
-    <p>
+
+    <p class="group-contacts-button">
         <a href="{{ route('groups.index') }}">
-            <button type="button">group contacts</button>
+            <button type="button">Group Contacts</button>
         </a>
     </p>
 </body>

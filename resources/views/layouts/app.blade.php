@@ -13,24 +13,54 @@
             display: flex;
         }
         .sidebar {
-            width: 100px;
+            width: 200px; /* Width of the sidebar */
             background-color: #007bff; /* Blue sidebar */
             color: white;
             padding: 20px;
-            position: absolute;
+            position: fixed; /* Fixed position */
             top: 0;
             left: 0;
             height: 100vh;
             overflow: auto;
             z-index: 1; /* Ensure sidebar is above content */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
         }
         .sidebar a {
             color: white;
             display: block;
-            padding: 10px 0;
+            padding: 10px 15px;
             text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
         }
         .sidebar a:hover {
+            background-color: #0056b3;
+        }
+        .login-logout {
+            margin-top: auto; /* Push the login/logout form to the bottom */
+        }
+        .login-logout form {
+            display: flex;
+            justify-content: center;
+        }
+        .login-logout button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: left;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+        }
+        .login-logout button:hover {
             background-color: #0056b3;
         }
         .content-wrapper {
@@ -46,7 +76,7 @@
             box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Shadow for content */
         }
         .btn {
-            position: fixed;
+            position: fixed; /* Fixed position */
             bottom: 20px;
             right: 20px;
             background-color: #007bff;
@@ -74,12 +104,15 @@
             <a href="{{ route('home') }}">Home</a>
             <a href="{{ route('contacts.index') }}">Contacts</a>
             <a href="{{ route('groups.index') }}">Groups</a>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" style="background: none; border: none; color: white; text-align: left; padding: 0; cursor: pointer;">Logout</button>
-            </form>
+        
+        <div class="login-logout">
             
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit">Logout</button>
+                </form>
         @endguest
+        </div>
     </div>
     <div class="content-wrapper">
         <div class="content">
